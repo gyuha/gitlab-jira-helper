@@ -1,4 +1,4 @@
-## Goal
+<!-- ## Goal
 - vite를 이용한 react 19 기반의 PWA(Progressive Web App) 앱을 개발
 대략적인 모양
 ![ui](../design.excalidraw.png)
@@ -22,7 +22,7 @@
 
 - 기능
  - 입력란과 출력란은 항상 모두 출력 해 줘
- - ui 는 Shadcn ui 사용해서 만들어 줘
+ - ui 는 Shadcn ui 사용해서 만들어 줘 -->
 
 ## Technology stack：
 - Typescript
