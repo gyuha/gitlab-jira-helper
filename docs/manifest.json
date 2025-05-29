@@ -5,9 +5,8 @@
   "theme_color": "#3B82F6",
   "background_color": "#ffffff",
   "display": "standalone",
-  "orientation": "portrait",
-  "scope": "/",
-  "start_url": "/",
+  "orientation": "portrait",  "scope": "/gitlab-jira-helper/",
+  "start_url": "/gitlab-jira-helper/",
   "icons": [
     {
       "src": "/favicon.svg",
