@@ -39,26 +39,24 @@ export function JiraHelper() {  const {
     const formatted = value.toUpperCase()
     setPrefix(formatted)
   }
-  
-  const isFormComplete = prefix && number;    return (
-    <div className="min-h-screen bg-background p-2 sm:p-4">
+    const isFormComplete = prefix && number;    return (
+    <div className="min-h-screen bg-background p-1 sm:p-2">
       <div className="max-w-4xl mx-auto">
         <Card className="w-full">
-          <CardHeader className="text-center relative px-3 py-3 sm:px-6 sm:py-6">
+          <CardHeader className="text-center relative px-2 py-2 sm:px-4 sm:py-3">
             <ThemeToggle />
-            <CardTitle className="text-xl sm:text-2xl font-bold">JIRA Helper</CardTitle>
-            <CardDescription className="text-sm sm:text-base">
+            <CardTitle className="text-lg sm:text-xl font-bold">JIRA Helper</CardTitle>
+            <CardDescription className="text-xs sm:text-sm">
               JIRA 티켓 및 Git 명령어를 생성하고 관리하세요
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-5 sm:space-y-8 px-3 py-3 sm:px-6 sm:py-6">{/* 입력 섹션 */}
+          <CardContent className="space-y-3 sm:space-y-4 px-2 py-2 sm:px-4 sm:py-3">            {/* 입력 섹션 */}
             <div>
-              <h3 className="text-lg font-semibold mb-4">입력</h3>
-              <div className="space-y-4">                {/* 첫 번째 행: JIRA Prefix, Git branch prefix, JIRA 번호 */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
-                  {/* JIRA Prefix 입력 */}
-                  <div className="space-y-2">
-                    <label htmlFor="prefix" className="text-sm font-medium">
+              <h3 className="text-base font-semibold mb-2">입력</h3>
+              <div className="space-y-3">                {/* 첫 번째 행: JIRA Prefix, Git branch prefix, JIRA 번호 */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 sm:gap-3">                  {/* JIRA Prefix 입력 */}
+                  <div className="space-y-1">
+                    <label htmlFor="prefix" className="text-xs font-medium">
                       JIRA Prefix
                     </label>
                     <Input
@@ -67,13 +65,13 @@ export function JiraHelper() {  const {
                       value={prefix}
                       onChange={(e) => handlePrefixChange(e.target.value)}
                       placeholder="PWA"
-                      className="font-mono"
+                      className="font-mono text-sm h-8"
                     />
                   </div>
 
                   {/* Git branch prefix 입력 */}
-                  <div className="space-y-2">
-                    <label htmlFor="gitBranchPrefix" className="text-sm font-medium">
+                  <div className="space-y-1">
+                    <label htmlFor="gitBranchPrefix" className="text-xs font-medium">
                       Git branch prefix
                     </label>
                     <Input
@@ -82,13 +80,13 @@ export function JiraHelper() {  const {
                       value={gitBranchPrefix}
                       onChange={(e) => setGitBranchPrefix(e.target.value)}
                       placeholder="feature"
-                      className="font-mono"
+                      className="font-mono text-sm h-8"
                     />
                   </div>
 
                   {/* JIRA 번호 입력 */}
-                  <div className="space-y-2">
-                    <label htmlFor="number" className="text-sm font-medium">
+                  <div className="space-y-1">
+                    <label htmlFor="number" className="text-xs font-medium">
                       JIRA 번호
                     </label>
                     <Input
@@ -97,14 +95,12 @@ export function JiraHelper() {  const {
                       value={number}
                       onChange={(e) => handleNumberChange(e.target.value)}
                       placeholder="1234"
-                      className="font-mono"
+                      className="font-mono text-sm h-8"
                     />
                   </div>
-                </div>
-
-                {/* 두 번째 행: 메시지 (전체 너비) */}
-                <div className="space-y-2">
-                  <label htmlFor="message" className="text-sm font-medium">
+                </div>                {/* 두 번째 행: 메시지 (전체 너비) */}
+                <div className="space-y-1">
+                  <label htmlFor="message" className="text-xs font-medium">
                     메시지
                   </label>
                   <Input
@@ -113,18 +109,17 @@ export function JiraHelper() {  const {
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                     placeholder="작업 내용을 입력하세요"
+                    className="text-sm h-8"
                   />
                 </div>
               </div>
-            </div>
-
-            {/* 출력 섹션 */}
+            </div>            {/* 출력 섹션 */}
             <div>
-              <h3 className="text-lg font-semibold mb-4">출력</h3>              <div className="space-y-3 sm:space-y-4">                {/* JIRA 티켓 번호 */}
-                <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between p-3 bg-muted rounded-md border sm:gap-3">
+              <h3 className="text-base font-semibold mb-2">출력</h3>              <div className="space-y-2 sm:space-y-3">                {/* JIRA 티켓 번호 */}
+                <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between p-2 bg-muted rounded-md border sm:gap-2">
                   <div className="flex-1 min-w-0">
-                    <div className="text-sm text-muted-foreground mb-1">JIRA 티켓 번호</div>
-                    <code className="text-sm font-mono break-all">
+                    <div className="text-xs text-muted-foreground mb-1">JIRA 티켓 번호</div>
+                    <code className="text-xs font-mono break-all">
                       {isFormComplete ? getJiraTicket() : '[JIRA Prefix][JIRA 번호]'}
                     </code>
                   </div>
@@ -133,16 +128,16 @@ export function JiraHelper() {  const {
                     variant="outline"
                     disabled={!isFormComplete}
                     onClick={() => handleCopy(getJiraTicket(), 'jira-ticket')}
-                    className="shrink-0 w-full sm:w-auto"
+                    className="shrink-0 w-full sm:w-auto h-7 text-xs"
                   >
-                    <Copy className="w-4 h-4 mr-1" />
+                    <Copy className="w-3 h-3 mr-1" />
                     {copied === 'jira-ticket' ? '복사됨!' : '복사'}
                   </Button>
                 </div>                {/* Git branch */}
-                <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between p-3 bg-muted rounded-md border sm:gap-3">
+                <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between p-2 bg-muted rounded-md border sm:gap-2">
                   <div className="flex-1 min-w-0">
-                    <div className="text-sm text-muted-foreground mb-1">Git branch</div>
-                    <code className="text-sm font-mono break-all">
+                    <div className="text-xs text-muted-foreground mb-1">Git branch</div>
+                    <code className="text-xs font-mono break-all">
                       {isFormComplete ? getSwitchCommand().replace('git switch ', '') : '[Git branch prefix]/[JIRA Prefix]-[JIRA 번호]'}
                     </code>
                   </div>
@@ -151,16 +146,16 @@ export function JiraHelper() {  const {
                     variant="outline"
                     disabled={!isFormComplete}
                     onClick={() => handleCopy(getSwitchCommand().replace('git switch ', ''), 'git-branch')}
-                    className="shrink-0 w-full sm:w-auto"
+                    className="shrink-0 w-full sm:w-auto h-7 text-xs"
                   >
-                    <Copy className="w-4 h-4 mr-1" />
+                    <Copy className="w-3 h-3 mr-1" />
                     {copied === 'git-branch' ? '복사됨!' : '복사'}
                   </Button>
                 </div>                {/* feat commit 메시지 */}
-                <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between p-3 bg-muted rounded-md border sm:gap-3">
+                <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between p-2 bg-muted rounded-md border sm:gap-2">
                   <div className="flex-1 min-w-0">
-                    <div className="text-sm text-muted-foreground mb-1">feat commit 메시지</div>
-                    <code className="text-sm font-mono break-all">
+                    <div className="text-xs text-muted-foreground mb-1">feat commit 메시지</div>
+                    <code className="text-xs font-mono break-all">
                       {isFormComplete ? getFeatCommit() : 'git commit -m "feat([JIRA Prefix][JIRA 번호]): [메시지]"'}
                     </code>
                   </div>
@@ -169,16 +164,17 @@ export function JiraHelper() {  const {
                     variant="outline"
                     disabled={!isFormComplete}
                     onClick={() => handleCopy(getFeatCommit(), 'feat-commit')}
-                    className="shrink-0 w-full sm:w-auto"
+                    className="shrink-0 w-full sm:w-auto h-7 text-xs"
                   >
-                    <Copy className="w-4 h-4 mr-1" />
+                    <Copy className="w-3 h-3 mr-1" />
                     {copied === 'feat-commit' ? '복사됨!' : '복사'}
-                  </Button>
-                </div>                {/* fix commit 메시지 */}
-                <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between p-3 bg-muted rounded-md border sm:gap-3">
+                  </Button>                </div>
+
+                {/* fix commit 메시지 */}
+                <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between p-2 bg-muted rounded-md border sm:gap-2">
                   <div className="flex-1 min-w-0">
-                    <div className="text-sm text-muted-foreground mb-1">fix commit 메시지</div>
-                    <code className="text-sm font-mono break-all">
+                    <div className="text-xs text-muted-foreground mb-1">fix commit 메시지</div>
+                    <code className="text-xs font-mono break-all">
                       {isFormComplete ? getFixCommit() : 'git commit -m "fix([JIRA Prefix][JIRA 번호]): [메시지]"'}
                     </code>
                   </div>
@@ -187,16 +183,16 @@ export function JiraHelper() {  const {
                     variant="outline"
                     disabled={!isFormComplete}
                     onClick={() => handleCopy(getFixCommit(), 'fix-commit')}
-                    className="shrink-0 w-full sm:w-auto"
+                    className="shrink-0 w-full sm:w-auto h-7 text-xs"
                   >
-                    <Copy className="w-4 h-4 mr-1" />
+                    <Copy className="w-3 h-3 mr-1" />
                     {copied === 'fix-commit' ? '복사됨!' : '복사'}
                   </Button>
                 </div>                {/* switch(new) */}
-                <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between p-3 bg-muted rounded-md border sm:gap-3">
+                <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between p-2 bg-muted rounded-md border sm:gap-2">
                   <div className="flex-1 min-w-0">
-                    <div className="text-sm text-muted-foreground mb-1">switch(new)</div>
-                    <code className="text-sm font-mono break-all">
+                    <div className="text-xs text-muted-foreground mb-1">switch(new)</div>
+                    <code className="text-xs font-mono break-all">
                       {isFormComplete ? getSwitchNewCommand() : 'git switch -c [Git branch prefix]/[JIRA Prefix]-[JIRA 번호]'}
                     </code>
                   </div>
@@ -205,16 +201,16 @@ export function JiraHelper() {  const {
                     variant="outline"
                     disabled={!isFormComplete}
                     onClick={() => handleCopy(getSwitchNewCommand(), 'switch-new')}
-                    className="shrink-0 w-full sm:w-auto"
+                    className="shrink-0 w-full sm:w-auto h-7 text-xs"
                   >
-                    <Copy className="w-4 h-4 mr-1" />
+                    <Copy className="w-3 h-3 mr-1" />
                     {copied === 'switch-new' ? '복사됨!' : '복사'}
                   </Button>
                 </div>                {/* switch */}
-                <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between p-3 bg-muted rounded-md border sm:gap-3">
+                <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between p-2 bg-muted rounded-md border sm:gap-2">
                   <div className="flex-1 min-w-0">
-                    <div className="text-sm text-muted-foreground mb-1">switch</div>
-                    <code className="text-sm font-mono break-all">
+                    <div className="text-xs text-muted-foreground mb-1">switch</div>
+                    <code className="text-xs font-mono break-all">
                       {isFormComplete ? getSwitchCommand() : 'git switch [Git branch prefix]/[JIRA Prefix]-[JIRA 번호]'}
                     </code>
                   </div>
@@ -223,9 +219,9 @@ export function JiraHelper() {  const {
                     variant="outline"
                     disabled={!isFormComplete}
                     onClick={() => handleCopy(getSwitchCommand(), 'switch')}
-                    className="shrink-0 w-full sm:w-auto"
+                    className="shrink-0 w-full sm:w-auto h-7 text-xs"
                   >
-                    <Copy className="w-4 h-4 mr-1" />
+                    <Copy className="w-3 h-3 mr-1" />
                     {copied === 'switch' ? '복사됨!' : '복사'}
                   </Button>
                 </div>
