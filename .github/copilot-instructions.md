@@ -8,8 +8,21 @@
 
 ## 작업 내용
 - 입력
-    - JIRA Prefix: `PWA-`
-    - JIRA 번호: `1234`
+    - JIRA Prefix: [입력란]
+    - Git branch prefix: [입력란]
+    - JIRA 번호: [숫자 입력란]
+    - 메시지 : [메시지 입력란]
+- 출력
+   - JIRA 티켓 번호: `[JIRA Prefix][JARA 번호]` , 클립보드 복사
+   - JIRA 티켓 번호: `[JIRA Prefix][JARA 번호]` , 클립보드 복사
+   - feat commit 메시지: `git commit -m "feat([JIRA Prefix][JARA 번호]): [메시지]"` , 클립보드 복사
+   - fix commit 메시지: `git commit -m "fix([JIRA Prefix][JARA 번호]): [메시지]"` , 클립보드 복사
+   - switch(new) : `git switch -c [Git branch prefix]/[JIRA Prefix]-[JARA 번호] : ` , 클립보드 복사
+   - switch : `git switch [Git branch prefix]/[JIRA Prefix]-[JARA 번호] : ` , 클립보드 복사
+
+- 기능
+ - 입력란과 출력란은 항상 모두 출력 해 줘
+ - ui 는 Shadcn ui 사용해서 만들어 줘
 
 ## Technology stack：
 - Typescript
