@@ -51,57 +51,59 @@ export function JiraHelper() {  const {
               JIRA 티켓 및 Git 명령어를 생성하고 관리하세요
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-8">
-            {/* 입력 섹션 */}
+          <CardContent className="space-y-8">            {/* 입력 섹션 */}
             <div>
               <h3 className="text-lg font-semibold mb-4">입력</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                {/* JIRA Prefix 입력 */}
-                <div className="space-y-2">
-                  <label htmlFor="prefix" className="text-sm font-medium">
-                    JIRA Prefix
-                  </label>
-                  <Input
-                    id="prefix"
-                    type="text"
-                    value={prefix}
-                    onChange={(e) => handlePrefixChange(e.target.value)}
-                    placeholder="PWA"
-                    className="font-mono"
-                  />
+              <div className="space-y-4">
+                {/* 첫 번째 행: JIRA Prefix, Git branch prefix, JIRA 번호 */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {/* JIRA Prefix 입력 */}
+                  <div className="space-y-2">
+                    <label htmlFor="prefix" className="text-sm font-medium">
+                      JIRA Prefix
+                    </label>
+                    <Input
+                      id="prefix"
+                      type="text"
+                      value={prefix}
+                      onChange={(e) => handlePrefixChange(e.target.value)}
+                      placeholder="PWA"
+                      className="font-mono"
+                    />
+                  </div>
+
+                  {/* Git branch prefix 입력 */}
+                  <div className="space-y-2">
+                    <label htmlFor="gitBranchPrefix" className="text-sm font-medium">
+                      Git branch prefix
+                    </label>
+                    <Input
+                      id="gitBranchPrefix"
+                      type="text"
+                      value={gitBranchPrefix}
+                      onChange={(e) => setGitBranchPrefix(e.target.value)}
+                      placeholder="feature"
+                      className="font-mono"
+                    />
+                  </div>
+
+                  {/* JIRA 번호 입력 */}
+                  <div className="space-y-2">
+                    <label htmlFor="number" className="text-sm font-medium">
+                      JIRA 번호
+                    </label>
+                    <Input
+                      id="number"
+                      type="text"
+                      value={number}
+                      onChange={(e) => handleNumberChange(e.target.value)}
+                      placeholder="1234"
+                      className="font-mono"
+                    />
+                  </div>
                 </div>
 
-                {/* Git branch prefix 입력 */}
-                <div className="space-y-2">
-                  <label htmlFor="gitBranchPrefix" className="text-sm font-medium">
-                    Git branch prefix
-                  </label>
-                  <Input
-                    id="gitBranchPrefix"
-                    type="text"
-                    value={gitBranchPrefix}
-                    onChange={(e) => setGitBranchPrefix(e.target.value)}
-                    placeholder="feature"
-                    className="font-mono"
-                  />
-                </div>
-
-                {/* JIRA 번호 입력 */}
-                <div className="space-y-2">
-                  <label htmlFor="number" className="text-sm font-medium">
-                    JIRA 번호
-                  </label>
-                  <Input
-                    id="number"
-                    type="text"
-                    value={number}
-                    onChange={(e) => handleNumberChange(e.target.value)}
-                    placeholder="1234"
-                    className="font-mono"
-                  />
-                </div>
-
-                {/* 메시지 입력 */}
+                {/* 두 번째 행: 메시지 (전체 너비) */}
                 <div className="space-y-2">
                   <label htmlFor="message" className="text-sm font-medium">
                     메시지
