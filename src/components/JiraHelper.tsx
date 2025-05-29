@@ -37,15 +37,15 @@ export function JiraHelper() {  const {
   const handlePrefixChange = (value: string) => {
     // 대문자로 변환
     const formatted = value.toUpperCase()
-    setPrefix(formatted)
-  }
+    setPrefix(formatted)  }
   const isFormComplete = prefix && number
+  
   return (
     <div className="min-h-screen bg-background p-4">
-      <ThemeToggle />
       <div className="max-w-4xl mx-auto">
         <Card className="w-full">
-          <CardHeader className="text-center">
+          <CardHeader className="text-center relative">
+            <ThemeToggle />
             <CardTitle className="text-2xl font-bold">JIRA Helper</CardTitle>
             <CardDescription>
               JIRA 티켓 및 Git 명령어를 생성하고 관리하세요
