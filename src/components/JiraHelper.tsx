@@ -39,7 +39,7 @@ export function JiraHelper() {  const {
     const formatted = value.toUpperCase()
     setPrefix(formatted)
   }
-  const isFormComplete = prefix && number && message
+  const isFormComplete = prefix && number
   return (
     <div className="min-h-screen bg-background p-4">
       <ThemeToggle />

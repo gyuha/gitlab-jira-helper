@@ -41,11 +41,13 @@ export const useJiraStore = create<JiraState>()(
         return `${state.gitBranchPrefix}/${state.prefix}-${state.number}`
       },      getFeatCommit: () => {
         const state = get()
-        return `git commit -m "feat(${state.prefix}${state.number}): ${state.message}"`
+        const message = state.message || '작업 내용'
+        return `git commit -m "feat(${state.prefix}${state.number}): ${message}"`
       },
       getFixCommit: () => {
         const state = get()
-        return `git commit -m "fix(${state.prefix}${state.number}): ${state.message}"`
+        const message = state.message || '작업 내용'
+        return `git commit -m "fix(${state.prefix}${state.number}): ${message}"`
       },
       getSwitchNewCommand: () => {
         const state = get()
