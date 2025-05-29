@@ -124,8 +124,7 @@ export function JiraHelper() {  const {
                 {/* JIRA 티켓 번호 */}
                 <div className="flex items-center justify-between p-3 bg-muted rounded-md border">
                   <div className="flex-1">
-                    <div className="text-sm text-muted-foreground mb-1">JIRA 티켓 번호</div>
-                    <code className="text-sm font-mono">
+                    <div className="text-sm text-muted-foreground mb-1">JIRA 티켓 번호</div>                    <code className="text-sm font-mono">
                       {isFormComplete ? getJiraTicket() : '[JIRA Prefix][JIRA 번호]'}
                     </code>
                   </div>
@@ -162,9 +161,8 @@ export function JiraHelper() {  const {
                 {/* feat commit 메시지 */}
                 <div className="flex items-center justify-between p-3 bg-muted rounded-md border">
                   <div className="flex-1">
-                    <div className="text-sm text-muted-foreground mb-1">feat commit 메시지</div>
-                    <code className="text-sm font-mono break-all">
-                      {isFormComplete ? getFeatCommit() : 'git commit -m "feat([JIRA Prefix]-[JIRA 번호]): [메시지]"'}
+                    <div className="text-sm text-muted-foreground mb-1">feat commit 메시지</div>                    <code className="text-sm font-mono break-all">
+                      {isFormComplete ? getFeatCommit() : 'git commit -m "feat([JIRA Prefix][JIRA 번호]): [메시지]"'}
                     </code>
                   </div>
                   <Button
@@ -181,9 +179,8 @@ export function JiraHelper() {  const {
                 {/* fix commit 메시지 */}
                 <div className="flex items-center justify-between p-3 bg-muted rounded-md border">
                   <div className="flex-1">
-                    <div className="text-sm text-muted-foreground mb-1">fix commit 메시지</div>
-                    <code className="text-sm font-mono break-all">
-                      {isFormComplete ? getFixCommit() : 'git commit -m "fix([JIRA Prefix]-[JIRA 번호]): [메시지]"'}
+                    <div className="text-sm text-muted-foreground mb-1">fix commit 메시지</div>                    <code className="text-sm font-mono break-all">
+                      {isFormComplete ? getFixCommit() : 'git commit -m "fix([JIRA Prefix][JIRA 번호]): [메시지]"'}
                     </code>
                   </div>
                   <Button

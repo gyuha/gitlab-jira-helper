@@ -24,8 +24,7 @@ interface JiraState {
 
 export const useJiraStore = create<JiraState>()(
   persist(
-    (set, get) => ({
-      prefix: 'PWA-',
+    (set, get) => ({      prefix: 'PWA',
       gitBranchPrefix: 'feature',
       number: '',
       message: '',
@@ -42,11 +41,11 @@ export const useJiraStore = create<JiraState>()(
         return `${state.gitBranchPrefix}/${state.prefix}-${state.number}`
       },      getFeatCommit: () => {
         const state = get()
-        return `git commit -m "feat(${state.prefix}-${state.number}): ${state.message}"`
+        return `git commit -m "feat(${state.prefix}${state.number}): ${state.message}"`
       },
       getFixCommit: () => {
         const state = get()
-        return `git commit -m "fix(${state.prefix}-${state.number}): ${state.message}"`
+        return `git commit -m "fix(${state.prefix}${state.number}): ${state.message}"`
       },
       getSwitchNewCommand: () => {
         const state = get()
@@ -61,9 +60,8 @@ export const useJiraStore = create<JiraState>()(
         const newHistory = [ticket, ...state.history.filter(h => h !== ticket)].slice(0, 10)
         set({ history: newHistory })
       },
-      clearHistory: () => set({ history: [] }),
-      reset: () => set({ 
-        prefix: 'PWA-', 
+      clearHistory: () => set({ history: [] }),      reset: () => set({ 
+        prefix: 'PWA', 
         gitBranchPrefix: 'feature',
         number: '', 
         message: '' 

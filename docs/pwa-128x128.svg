@@ -1,0 +1,7 @@
+<svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="128" height="128" rx="16" fill="#3B82F6"/>
+  <rect x="16" y="16" width="96" height="96" rx="8" fill="white"/>
+  <text x="64" y="48" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#3B82F6">JIRA</text>
+  <text x="64" y="80" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#6B7280">Helper</text>
+  <rect x="32" y="88" width="64" height="2.67" rx="1.33" fill="#3B82F6"/>
+</svg>
