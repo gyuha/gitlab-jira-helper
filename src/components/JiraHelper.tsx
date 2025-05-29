@@ -93,7 +93,7 @@ export function JiraHelper() {
                     type="text"
                     value={gitBranchPrefix}
                     onChange={(e) => setGitBranchPrefix(e.target.value)}
-                    placeholder="feature"
+                    placeholder="feature/"
                     className="font-mono text-sm h-8"
                   />
                 </div>
