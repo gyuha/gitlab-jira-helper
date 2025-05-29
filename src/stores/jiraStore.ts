@@ -38,7 +38,7 @@ export const useJiraStore = create<JiraState>()(
       },
       getGitBranch: () => {
         const state = get()
-        return `${state.gitBranchPrefix}/${state.prefix}-${state.number}`
+        return `${state.gitBranchPrefix}/${state.prefix}${state.number}`
       },      getFeatCommit: () => {
         const state = get()
         const message = state.message || '작업 내용'
@@ -51,11 +51,11 @@ export const useJiraStore = create<JiraState>()(
       },
       getSwitchNewCommand: () => {
         const state = get()
-        return `git switch -c ${state.gitBranchPrefix}/${state.prefix}-${state.number}`
+        return `git switch -c ${state.gitBranchPrefix}/${state.prefix}${state.number}`
       },
       getSwitchCommand: () => {
         const state = get()
-        return `git switch ${state.gitBranchPrefix}/${state.prefix}-${state.number}`
+        return `git switch ${state.gitBranchPrefix}/${state.prefix}${state.number}`
       },
       addToHistory: (ticket: string) => {
         const state = get()
