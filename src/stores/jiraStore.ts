@@ -24,7 +24,8 @@ interface JiraState {
 
 export const useJiraStore = create<JiraState>()(
   persist(
-    (set, get) => ({      prefix: 'PRD-',
+    (set, get) => ({
+      prefix: 'PRD-',
       gitBranchPrefix: `feature/`,
       number: '1',
       message: '',
@@ -32,14 +33,14 @@ export const useJiraStore = create<JiraState>()(
       setPrefix: (prefix: string) => set({ prefix }),
       setGitBranchPrefix: (gitBranchPrefix: string) => set({ gitBranchPrefix }),
       setNumber: (number: string) => set({ number }),
-      setMessage: (message: string) => set({ message }),      getJiraTicket: () => {
+      setMessage: (message: string) => set({ message }), getJiraTicket: () => {
         const state = get()
         return `${state.prefix}${state.number}`
       },
       getGitBranch: () => {
         const state = get()
         return `${state.gitBranchPrefix}${state.prefix}${state.number}`
-      },      getFeatCommit: () => {
+      }, getFeatCommit: () => {
         const state = get()
         const message = state.message || '작업 내용'
         return `git commit -m "feat(${state.prefix}${state.number}): ${message}"`
@@ -62,11 +63,11 @@ export const useJiraStore = create<JiraState>()(
         const newHistory = [ticket, ...state.history.filter(h => h !== ticket)].slice(0, 10)
         set({ history: newHistory })
       },
-      clearHistory: () => set({ history: [] }),      reset: () => set({ 
-        prefix: 'PRD-', 
+      clearHistory: () => set({ history: [] }), reset: () => set({
+        prefix: 'PRD-',
         gitBranchPrefix: `feature/`,
-        number: '', 
-        message: '' 
+        number: '',
+        message: ''
       }),
     }),
     {
