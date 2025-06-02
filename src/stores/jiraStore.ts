@@ -13,8 +13,7 @@ interface JiraState {
   setMessage: (message: string) => void
   getJiraTicket: () => string
   getGitBranch: () => string
-  getFeatCommit: () => string
-  getFixCommit: () => string
+  getCommit: (type: string) => string
   getSwitchNewCommand: () => string
   getSwitchCommand: () => string
   addToHistory: (ticket: string) => void
@@ -40,15 +39,10 @@ export const useJiraStore = create<JiraState>()(
       getGitBranch: () => {
         const state = get()
         return `${state.gitBranchPrefix}${state.prefix}${state.number}`
-      }, getFeatCommit: () => {
+      }, getCommit: (type: string) => {
         const state = get()
         const message = state.message || '작업 내용'
-        return `git commit -m "feat(${state.prefix}${state.number}): ${message}"`
-      },
-      getFixCommit: () => {
-        const state = get()
-        const message = state.message || '작업 내용'
-        return `git commit -m "fix(${state.prefix}${state.number}): ${message}"`
+        return `git commit -m "${type}(${state.prefix}${state.number}): ${message}"`
       },
       getSwitchNewCommand: () => {
         const state = get()
