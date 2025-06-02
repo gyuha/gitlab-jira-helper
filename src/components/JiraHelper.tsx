@@ -34,8 +34,20 @@ function OutputItem({
   return (
     <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between p-2 bg-muted rounded-md border sm:gap-2">
       <div className="flex-1 min-w-0">
-        <div className="text-xs text-muted-foreground mb-1">
-          {label}
+        <div className="flex items-center justify-between mb-1">
+          <div className="text-xs text-muted-foreground">
+            {label}
+          </div>
+          <Button
+            size="sm"
+            variant="outline"
+            disabled={!isFormComplete}
+            onClick={() => onCopy(value, copyKey)}
+            className="shrink-0 h-6 text-xs sm:hidden"
+          >
+            <Copy className="w-3 h-3 mr-1" />
+            {copied === copyKey ? "복사됨!" : "복사"}
+          </Button>
         </div>
         <code className="text-xs font-mono break-all">
           {isFormComplete ? value : placeholder}
@@ -46,7 +58,7 @@ function OutputItem({
         variant="outline"
         disabled={!isFormComplete}
         onClick={() => onCopy(value, copyKey)}
-        className="shrink-0 w-full sm:w-auto h-7 text-xs"
+        className="shrink-0 w-full sm:w-auto h-7 text-xs hidden sm:flex"
       >
         <Copy className="w-3 h-3 mr-1" />
         {copied === copyKey ? "복사됨!" : "복사"}
@@ -137,8 +149,8 @@ export function JiraHelper() {
       <Card className="w-full">
         <CardHeader className="text-center relative px-2 py-2 sm:px-4 sm:py-3">
           <ThemeToggle />
-          <CardTitle className="text-lg sm:text-xl font-bold">JIRA Helper</CardTitle>
-          <CardDescription className="text-xs sm:text-sm">
+          <CardTitle className="text-lg sm:text-xl font-bold hidden sm:block">JIRA Helper</CardTitle>
+          <CardDescription className="text-xs sm:text-sm hidden sm:block">
             JIRA 티켓 및 Git 명령어를 생성하고 관리하세요
           </CardDescription>
         </CardHeader>
