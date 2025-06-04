@@ -49,6 +49,7 @@ export function JiraHelper() {
     setMessage,
     getJiraTicket,
     getCommit,
+    getCommitMessage,
     getSwitchNewCommand,
     getSwitchCommand,
   } = useJiraStore();
@@ -89,9 +90,15 @@ export function JiraHelper() {
       copyKey: "git-branch",
     },
     {
-      label: "commit 메시지",
+      label: "commit",
       value: getCommit(selectedCommitType),
       placeholder: `git commit -m "${selectedCommitType}([JIRA Prefix][JIRA 번호]): [메시지]"`,
+      copyKey: "commit",
+    },
+    {
+      label: "commit 메시지",
+      value: getCommitMessage(selectedCommitType),
+      placeholder: `${selectedCommitType}([JIRA Prefix][JIRA 번호]): [메시지]`,
       copyKey: "commit",
     },
     {
