@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
+import Fuse from "fuse.js";
+import { Search } from "lucide-react";
 import { useJiraStore } from "../stores/jiraStore";
 import { OutputItem } from "./OutputItem";
 import { ThemeToggle } from "./ThemeToggle";
@@ -55,6 +57,7 @@ export function JiraHelper() {
   } = useJiraStore();
   const [copied, setCopied] = useState<string | null>(null);
   const [selectedCommitType, setSelectedCommitType] = useState<string>("feat");
+  const [searchQuery, setSearchQuery] = useState<string>("");
 
   const handleCopy = async (text: string, type: string) => {
     await navigator.clipboard.writeText(text);
@@ -73,48 +76,76 @@ export function JiraHelper() {
     const formatted = value.toUpperCase();
     setPrefix(formatted);
   };
-
   const isFormComplete = !!(prefix && number);
 
-  const outputItems = [
-    {
-      label: "JIRA 티켓 번호",
-      value: getJiraTicket(),
-      placeholder: "[JIRA Prefix][JIRA 번호]",
-      copyKey: "jira-ticket",
-    },
-    {
-      label: "Git branch",
-      value: getSwitchCommand().replace("git switch ", ""),
-      placeholder: "[Git branch prefix]/[JIRA Prefix]-[JIRA 번호]",
-      copyKey: "git-branch",
-    },
-    {
-      label: "commit",
-      value: getCommit(selectedCommitType),
-      placeholder: `git commit -m "${selectedCommitType}([JIRA Prefix][JIRA 번호]): [메시지]"`,
-      copyKey: "commit",
-    },
-    {
-      label: "commit 메시지",
-      value: getCommitMessage(selectedCommitType),
-      placeholder: `${selectedCommitType}([JIRA Prefix][JIRA 번호]): [메시지]`,
-      copyKey: "commit",
-    },
-    {
-      label: "switch(new)",
-      value: getSwitchNewCommand(),
-      placeholder:
-        "git switch -c [Git branch prefix]/[JIRA Prefix]-[JIRA 번호]",
-      copyKey: "switch-new",
-    },
-    {
-      label: "switch",
-      value: getSwitchCommand(),
-      placeholder: "git switch [Git branch prefix]/[JIRA Prefix]-[JIRA 번호]",
-      copyKey: "switch",
-    },
-  ];
+  const outputItems = useMemo(
+    () => [
+      {
+        label: "JIRA 티켓 번호",
+        value: getJiraTicket(),
+        placeholder: "[JIRA Prefix][JIRA 번호]",
+        copyKey: "jira-ticket",
+      },
+      {
+        label: "Git branch",
+        value: getSwitchCommand().replace("git switch ", ""),
+        placeholder: "[Git branch prefix]/[JIRA Prefix]-[JIRA 번호]",
+        copyKey: "git-branch",
+      },
+      {
+        label: "commit",
+        value: getCommit(selectedCommitType),
+        placeholder: `git commit -m "${selectedCommitType}([JIRA Prefix][JIRA 번호]): [메시지]"`,
+        copyKey: "commit",
+      },
+      {
+        label: "commit message",
+        value: getCommitMessage(selectedCommitType),
+        placeholder: `${selectedCommitType}([JIRA Prefix][JIRA 번호]): [메시지]`,
+        copyKey: "commit-message",
+      },
+      {
+        label: "switch(new)",
+        value: getSwitchNewCommand(),
+        placeholder:
+          "git switch -c [Git branch prefix]/[JIRA Prefix]-[JIRA 번호]",
+        copyKey: "switch-new",
+      },
+      {
+        label: "switch",
+        value: getSwitchCommand(),
+        placeholder: "git switch [Git branch prefix]/[JIRA Prefix]-[JIRA 번호]",
+        copyKey: "switch",
+      },
+    ],
+    [
+      getJiraTicket,
+      getSwitchCommand,
+      getCommit,
+      getCommitMessage,
+      getSwitchNewCommand,
+      selectedCommitType,
+    ]
+  );
+
+  // 퍼지 검색 설정
+  const fuse = useMemo(() => {
+    return new Fuse(outputItems, {
+      keys: ["label", "value"],
+      threshold: 0.4,
+      includeScore: true,
+    });
+  }, [outputItems]);
+
+  // 검색 결과 필터링
+  const filteredOutputItems = useMemo(() => {
+    if (!searchQuery.trim()) {
+      return outputItems;
+    }
+
+    const searchResults = fuse.search(searchQuery);
+    return searchResults.map((result) => result.item);
+  }, [searchQuery, fuse, outputItems]);
 
   return (
     <div className="min-h-screen bg-background p-1 sm:p-2">
@@ -131,7 +162,7 @@ export function JiraHelper() {
         <CardContent className="space-y-3 sm:space-y-4 px-2 py-2 sm:px-4 sm:py-3">
           {/* 입력 섹션 */}
           <div>
-            <h3 className="text-base font-semibold mb-2">입력</h3>
+            <h3 className="text-base font-semibold">입력</h3>
             <div className="space-y-3">
               {/* 첫 번째 행: JIRA Prefix, Git branch prefix, JIRA 번호 */}
               <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-4 gap-2 sm:gap-3">
@@ -204,7 +235,7 @@ export function JiraHelper() {
                     </SelectContent>
                   </Select>
                 </div>
-              </div>
+              </div>{" "}
               <div className="space-y-1">
                 <label
                   htmlFor="message"
@@ -218,27 +249,45 @@ export function JiraHelper() {
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   placeholder="메시지를 입력하세요 (기본값: '작업 내용' 사용)"
-                  className="text-sm h-8"
                 />
               </div>
             </div>
-          </div>
+          </div>{" "}
           {/* 출력 섹션 */}
           <div>
-            <h3 className="text-base font-semibold mb-2">출력</h3>
-            <div className="space-y-2 sm:space-y-3">
-              {outputItems.map((item) => (
-                <OutputItem
-                  key={item.copyKey}
-                  label={item.label}
-                  value={item.value}
-                  placeholder={item.placeholder}
-                  copyKey={item.copyKey}
-                  copied={copied}
-                  isFormComplete={isFormComplete}
-                  onCopy={handleCopy}
+            {" "}
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="text-base font-semibold">출력</h3>
+              <div className="w-48 relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+                <Input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="출력 결과 검색..."
+                  className="text-sm h-7 pl-10"
                 />
-              ))}
+              </div>
+            </div>
+            <div className="space-y-2 sm:space-y-3">
+              {filteredOutputItems.length > 0 ? (
+                filteredOutputItems.map((item) => (
+                  <OutputItem
+                    key={item.copyKey}
+                    label={item.label}
+                    value={item.value}
+                    placeholder={item.placeholder}
+                    copyKey={item.copyKey}
+                    copied={copied}
+                    isFormComplete={isFormComplete}
+                    onCopy={handleCopy}
+                  />
+                ))
+              ) : (
+                <div className="text-center py-4 text-muted-foreground text-sm">
+                  검색 결과가 없습니다
+                </div>
+              )}
             </div>
           </div>
         </CardContent>
