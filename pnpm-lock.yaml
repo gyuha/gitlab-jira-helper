@@ -69,6 +69,9 @@ importers:
       '@vitejs/plugin-react':
         specifier: ^4.4.1
         version: 4.5.1(vite@6.3.5(@types/node@22.15.29)(jiti@1.21.7)(terser@5.40.0)(yaml@2.8.0))
+      babel-plugin-react-compiler:
+        specifier: ^19.1.0-rc.2
+        version: 19.1.0-rc.2
       eslint:
         specifier: ^9.25.0
         version: 9.28.0(jiti@1.21.7)
@@ -1474,6 +1477,9 @@ packages:
     resolution: {integrity: sha512-7gD3pRadPrbjhjLyxebmx/WrFYcuSjZ0XbdUujQMZ/fcE9oeewk2U/7PCvez84UeuK3oSjmPZ0Ch0dlupQvGzw==}
     peerDependencies:
       '@babel/core': ^7.4.0 || ^8.0.0-0 <8.0.0
+
+  babel-plugin-react-compiler@19.1.0-rc.2:
+    resolution: {integrity: sha512-kSNA//p5fMO6ypG8EkEVPIqAjwIXm5tMjfD1XRPL/sRjYSbJ6UsvORfaeolNWnZ9n310aM0xJP7peW26BuCVzA==}
 
   balanced-match@1.0.2:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
@@ -4423,6 +4429,10 @@ snapshots:
       '@babel/helper-define-polyfill-provider': 0.6.4(@babel/core@7.27.4)
     transitivePeerDependencies:
       - supports-color
+
+  babel-plugin-react-compiler@19.1.0-rc.2:
+    dependencies:
+      '@babel/types': 7.27.3
 
   balanced-match@1.0.2: {}
 

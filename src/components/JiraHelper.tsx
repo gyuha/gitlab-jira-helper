@@ -54,6 +54,8 @@ export function JiraHelper() {
     getCommitMessage,
     getSwitchNewCommand,
     getSwitchCommand,
+    jiraDomain,
+    setJiraDomain,
   } = useJiraStore();
   const [copied, setCopied] = useState<string | null>(null);
   const [selectedCommitType, setSelectedCommitType] = useState<string>("feat");
@@ -77,6 +79,9 @@ export function JiraHelper() {
     setPrefix(formatted);
   };
   const isFormComplete = !!(prefix && number);
+  const isUrlReady = !!(jiraDomain && prefix && number);
+  const issueKey = `${prefix}-${number}`;
+  const issueUrl = isUrlReady ? `https://${jiraDomain}/browse/${issueKey}` : "";
 
   // 출력 항목들을 계산하는 헬퍼 함수들
   const createOutputItems = () => [
@@ -154,6 +159,19 @@ export function JiraHelper() {
           <div>
             <h3 className="text-base font-semibold">입력</h3>
             <div className="space-y-3">
+              {/* JIRA_DOMAIN 입력란 (PC에서만 보임) */}
+              <div className="space-y-1 hidden sm:block">
+                <label htmlFor="jiraDomain" className="text-xs font-medium">
+                  JIRA 도메인
+                </label>
+                <Input
+                  id="jiraDomain"
+                  type="text"
+                  value={jiraDomain}
+                  onChange={(e) => setJiraDomain(e.target.value)}
+                  placeholder="your-domain.atlassian.net"
+                />
+              </div>
               {/* 첫 번째 행: JIRA Prefix, Git branch prefix, JIRA 번호 */}
               <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-4 gap-2 sm:gap-3">
                 {/* JIRA Prefix 입력 - 작은 화면에서 숨김 */}
@@ -167,7 +185,6 @@ export function JiraHelper() {
                     value={prefix}
                     onChange={(e) => handlePrefixChange(e.target.value)}
                     placeholder="PWA"
-                    className="font-mono text-sm h-8"
                   />
                 </div>
                 {/* Git branch prefix 입력 - 작은 화면에서 숨김 */}
@@ -184,7 +201,6 @@ export function JiraHelper() {
                     value={gitBranchPrefix}
                     onChange={(e) => setGitBranchPrefix(e.target.value)}
                     placeholder="feature/"
-                    className="font-mono text-sm h-8"
                   />
                 </div>
                 <div className="space-y-1">
@@ -197,7 +213,6 @@ export function JiraHelper() {
                     value={number}
                     onChange={(e) => handleNumberChange(e.target.value)}
                     placeholder="1234"
-                    className="font-mono text-sm h-8"
                   />
                 </div>
                 {/* 커밋 타입 선택 */}
@@ -209,7 +224,7 @@ export function JiraHelper() {
                     value={selectedCommitType}
                     onValueChange={setSelectedCommitType}
                   >
-                    <SelectTrigger className="h-8 text-sm">
+                    <SelectTrigger>
                       <SelectValue placeholder="커밋 타입을 선택하세요" />
                     </SelectTrigger>
                     <SelectContent>
@@ -217,7 +232,6 @@ export function JiraHelper() {
                         <SelectItem
                           key={type.value}
                           value={type.value}
-                          className="text-sm"
                         >
                           {type.label}
                         </SelectItem>
@@ -259,6 +273,20 @@ export function JiraHelper() {
                 />
               </div>
             </div>
+            {/* URL 추가 */}
+            {isUrlReady && (
+              <div className="mb-2">
+                <span className="text-xs font-medium mr-2">이슈 URL:</span>
+                <a
+                  href={issueUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-primary underline break-all hover:text-primary/80"
+                >
+                  {issueUrl}
+                </a>
+              </div>
+            )}
             <div className="space-y-2 sm:space-y-3">
               {filteredOutputItems().length > 0 ? (
                 filteredOutputItems().map((item) => (

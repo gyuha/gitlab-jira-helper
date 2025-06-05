@@ -7,10 +7,12 @@ interface JiraState {
   number: string;
   message: string;
   history: string[];
+  jiraDomain: string;
   setPrefix: (prefix: string) => void;
   setGitBranchPrefix: (gitBranchPrefix: string) => void;
   setNumber: (number: string) => void;
   setMessage: (message: string) => void;
+  setJiraDomain: (jiraDomain: string) => void;
   getJiraTicket: () => string;
   getGitBranch: () => string;
   getCommit: (type: string) => string;
@@ -30,10 +32,12 @@ export const useJiraStore = create<JiraState>()(
       number: "1",
       message: "",
       history: [],
+      jiraDomain: "",
       setPrefix: (prefix: string) => set({ prefix }),
       setGitBranchPrefix: (gitBranchPrefix: string) => set({ gitBranchPrefix }),
       setNumber: (number: string) => set({ number }),
       setMessage: (message: string) => set({ message }),
+      setJiraDomain: (jiraDomain: string) => set({ jiraDomain }),
       getJiraTicket: () => {
         const state = get();
         return `${state.prefix}${state.number}`;
@@ -75,6 +79,7 @@ export const useJiraStore = create<JiraState>()(
           gitBranchPrefix: `feature/`,
           number: "",
           message: "",
+          jiraDomain: "",
         }),
     }),
     {

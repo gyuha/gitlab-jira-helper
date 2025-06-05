@@ -1,0 +1,23 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# 기술 스택 및 코드 스타일 가이드
+
+이 프로젝트의 기술 스택, 필수 MCP, 코드 스타일, React 19 아키텍처, 상태 관리, 분석 및 구현 전략 등은 [copilot-instructions.md](mdc:.github/copilot-instructions.md)에 상세히 명시되어 있습니다.
+
+## 주요 요약
+
+- **기술 스택**: Typescript, React 19, Shadcn UI, Tailwind CSS, zustand
+- **필수 MCP**: Context7 mcp, shrimp-task-manager mcp, playwright mcp (에러 시)
+- **언어**: 항상 한국어로 응답
+- **코드 스타일**: TypeScript, 함수형/선언형, DRY, 명확한 네이밍, interface 우선, enum 대신 const map, 타입 세이프티, `satisfies` 활용
+- **React 19**: RSC 우선, useActionState, Suspense, Error Boundary, Web Vitals 최적화
+- **상태 관리**: useActionState, useFormStatus, nuqs로 URL 상태, 클라이언트 상태 최소화
+- **구현 원칙**: 완전한 기능 구현, 누락/placeholder 금지, 최적화, 보안, 접근성, 테스트 계획
+
+## 세부 규칙
+
+- 모든 상세 규칙, 예시, 네이밍 컨벤션, 구현 전략 등은 [copilot-instructions.md](mdc:.github/copilot-instructions.md)에서 확인하세요.
+- 이 파일은 copilot-instructions.md의 내용을 Cursor 규칙 시스템에 통합하기 위한 요약 및 참조 역할을 합니다.
