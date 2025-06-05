@@ -1,7 +1,7 @@
 ---
 description: 
 globs: 
-alwaysApply: false
+alwaysApply: true
 ---
 # 기술 스택 및 코드 스타일 가이드
 
@@ -19,5 +19,4 @@ alwaysApply: false
 
 ## 세부 규칙
 
-- 모든 상세 규칙, 예시, 네이밍 컨벤션, 구현 전략 등은 [copilot-instructions.md](mdc:.github/copilot-instructions.md)에서 확인하세요.
 - 이 파일은 copilot-instructions.md의 내용을 Cursor 규칙 시스템에 통합하기 위한 요약 및 참조 역할을 합니다.
