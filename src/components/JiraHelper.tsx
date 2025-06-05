@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import Fuse from "fuse.js";
 import { Search } from "lucide-react";
 import { useJiraStore } from "../stores/jiraStore";
@@ -78,55 +78,48 @@ export function JiraHelper() {
   };
   const isFormComplete = !!(prefix && number);
 
-  const outputItems = useMemo(
-    () => [
-      {
-        label: "JIRA 티켓 번호",
-        value: getJiraTicket(),
-        placeholder: "[JIRA Prefix][JIRA 번호]",
-        copyKey: "jira-ticket",
-      },
-      {
-        label: "Git branch",
-        value: getSwitchCommand().replace("git switch ", ""),
-        placeholder: "[Git branch prefix]/[JIRA Prefix]-[JIRA 번호]",
-        copyKey: "git-branch",
-      },
-      {
-        label: "commit",
-        value: getCommit(selectedCommitType),
-        placeholder: `git commit -m "${selectedCommitType}([JIRA Prefix][JIRA 번호]): [메시지]"`,
-        copyKey: "commit",
-      },
-      {
-        label: "commit message",
-        value: getCommitMessage(selectedCommitType),
-        placeholder: `${selectedCommitType}([JIRA Prefix][JIRA 번호]): [메시지]`,
-        copyKey: "commit-message",
-      },
-      {
-        label: "switch(new)",
-        value: getSwitchNewCommand(),
-        placeholder:
-          "git switch -c [Git branch prefix]/[JIRA Prefix]-[JIRA 번호]",
-        copyKey: "switch-new",
-      },
-      {
-        label: "switch",
-        value: getSwitchCommand(),
-        placeholder: "git switch [Git branch prefix]/[JIRA Prefix]-[JIRA 번호]",
-        copyKey: "switch",
-      },
-    ],
-    [
-      getJiraTicket,
-      getSwitchCommand,
-      getCommit,
-      getCommitMessage,
-      getSwitchNewCommand,
-      selectedCommitType,
-    ]
-  );
+  // 출력 항목들을 계산하는 헬퍼 함수들
+  const createOutputItems = () => [
+    {
+      label: "JIRA 티켓 번호",
+      value: getJiraTicket(),
+      placeholder: "[JIRA Prefix][JIRA 번호]",
+      copyKey: "jira-ticket",
+    },
+    {
+      label: "Git branch",
+      value: getSwitchCommand().replace("git switch ", ""),
+      placeholder: "[Git branch prefix]/[JIRA Prefix]-[JIRA 번호]",
+      copyKey: "git-branch",
+    },
+    {
+      label: "commit",
+      value: getCommit(selectedCommitType),
+      placeholder: `git commit -m "${selectedCommitType}([JIRA Prefix][JIRA 번호]): [메시지]"`,
+      copyKey: "commit",
+    },
+    {
+      label: "commit message",
+      value: getCommitMessage(selectedCommitType),
+      placeholder: `${selectedCommitType}([JIRA Prefix][JIRA 번호]): [메시지]`,
+      copyKey: "commit-message",
+    },
+    {
+      label: "switch(new)",
+      value: getSwitchNewCommand(),
+      placeholder: "git switch -c [Git branch prefix]/[JIRA Prefix]-[JIRA 번호]",
+      copyKey: "switch-new",
+    },
+    {
+      label: "switch",
+      value: getSwitchCommand(),
+      placeholder: "git switch [Git branch prefix]/[JIRA Prefix]-[JIRA 번호]",
+      copyKey: "switch",
+    },
+  ];
+
+  // React 19에서도 복잡한 계산은 여전히 메모이제이션이 권장됨
+  const outputItems = createOutputItems();
 
   // 검색 결과 필터링
   const filteredOutputItems = () => {
@@ -200,7 +193,7 @@ export function JiraHelper() {
                   </label>
                   <Input
                     id="number"
-                    type="text"
+                    type="number"
                     value={number}
                     onChange={(e) => handleNumberChange(e.target.value)}
                     placeholder="1234"
