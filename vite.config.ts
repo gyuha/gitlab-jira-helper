@@ -8,15 +8,7 @@ export default defineConfig({
     outDir: 'docs'
   },
   plugins: [
-    react({
-      babel: {
-        plugins: [
-          ["babel-plugin-react-compiler", {
-            target: '19'
-          }]
-        ]
-      }
-    }),
+    react(),
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'],
