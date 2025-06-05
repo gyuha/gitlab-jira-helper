@@ -60,6 +60,7 @@ export function JiraHelper() {
   const [copied, setCopied] = useState<string | null>(null);
   const [selectedCommitType, setSelectedCommitType] = useState<string>("feat");
   const [searchQuery, setSearchQuery] = useState<string>("");
+  const [domainError, setDomainError] = useState<string>("");
 
   const handleCopy = async (text: string, type: string) => {
     await navigator.clipboard.writeText(text);
@@ -78,8 +79,33 @@ export function JiraHelper() {
     const formatted = value.toUpperCase();
     setPrefix(formatted);
   };
+
+  // 도메인/IP 유효성 검증 함수
+  const validateDomain = (value: string) => {
+    const domainRegex = /^([a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$/;
+    const ipRegex = /^(\d{1,3}\.){3}\d{1,3}(:\d{1,5})?$/;
+    if (!value) {
+      setDomainError("");
+      return false;
+    }
+    if (domainRegex.test(value) || ipRegex.test(value)) {
+      setDomainError("");
+      return true;
+    } else {
+      setDomainError("올바른 도메인 또는 IP 형식이 아닙니다.");
+      return false;
+    }
+  };
+
+  // 입력 변경 핸들러
+  const handleJiraDomainChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setJiraDomain(value);
+    validateDomain(value);
+  };
+
   const isFormComplete = !!(prefix && number);
-  const isUrlReady = !!(jiraDomain && prefix && number);
+  const isUrlReady = !!(jiraDomain && prefix && number && !domainError);
   const issueKey = `${prefix}-${number}`;
   const issueUrl = isUrlReady ? `https://${jiraDomain}/browse/${issueKey}` : "";
 
@@ -168,9 +194,12 @@ export function JiraHelper() {
                   id="jiraDomain"
                   type="text"
                   value={jiraDomain}
-                  onChange={(e) => setJiraDomain(e.target.value)}
+                  onChange={handleJiraDomainChange}
                   placeholder="your-domain.atlassian.net"
                 />
+                {domainError && (
+                  <p className="text-xs text-red-500">{domainError}</p>
+                )}
               </div>
               {/* 첫 번째 행: JIRA Prefix, Git branch prefix, JIRA 번호 */}
               <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-4 gap-2 sm:gap-3">
@@ -281,7 +310,7 @@ export function JiraHelper() {
                   href={issueUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-primary underline break-all hover:text-primary/80"
+                  className="text-xs underline break-all hover:text-primary/80"
                 >
                   {issueUrl}
                 </a>
