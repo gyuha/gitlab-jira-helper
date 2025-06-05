@@ -128,24 +128,21 @@ export function JiraHelper() {
     ]
   );
 
-  // 퍼지 검색 설정
-  const fuse = useMemo(() => {
-    return new Fuse(outputItems, {
-      keys: ["label", "value"],
-      threshold: 0.4,
-      includeScore: true,
-    });
-  }, [outputItems]);
-
   // 검색 결과 필터링
-  const filteredOutputItems = useMemo(() => {
+  const filteredOutputItems = () => {
     if (!searchQuery.trim()) {
       return outputItems;
     }
 
+    const fuse = new Fuse(outputItems, {
+      keys: ["label", "value"],
+      threshold: 0.4,
+      includeScore: true,
+    });
+
     const searchResults = fuse.search(searchQuery);
     return searchResults.map((result) => result.item);
-  }, [searchQuery, fuse, outputItems]);
+  };
 
   return (
     <div className="min-h-screen bg-background p-1 sm:p-2">
@@ -270,8 +267,8 @@ export function JiraHelper() {
               </div>
             </div>
             <div className="space-y-2 sm:space-y-3">
-              {filteredOutputItems.length > 0 ? (
-                filteredOutputItems.map((item) => (
+              {filteredOutputItems().length > 0 ? (
+                filteredOutputItems().map((item) => (
                   <OutputItem
                     key={item.copyKey}
                     label={item.label}
