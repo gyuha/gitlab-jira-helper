@@ -106,7 +106,7 @@ export function JiraHelper() {
 
   const isFormComplete = !!(prefix && number);
   const isUrlReady = !!(jiraDomain && prefix && number && !domainError);
-  const issueKey = `${prefix}-${number}`;
+  const issueKey = `${prefix}${number}`;
   const issueUrl = isUrlReady ? `https://${jiraDomain}/browse/${issueKey}` : "";
 
   // 출력 항목들을 계산하는 헬퍼 함수들
