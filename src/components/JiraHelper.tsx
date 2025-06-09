@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Fuse from "fuse.js";
-import { Search } from "lucide-react";
+import { Search, X } from "lucide-react";
 import { useJiraStore } from "../stores/jiraStore";
 import { OutputItem } from "./OutputItem";
 import { ThemeToggle } from "./ThemeToggle";
@@ -298,8 +298,17 @@ export function JiraHelper() {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="출력 결과 검색..."
-                  className="text-sm h-7 pl-10"
+                  className="text-xs h-7 pl-10 pr-8"
                 />
+                {searchQuery && (
+                  <button
+                    onClick={() => setSearchQuery("")}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                    type="button"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                )}
               </div>
             </div>
             {/* URL 추가 */}
