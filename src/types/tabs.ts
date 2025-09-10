@@ -5,6 +5,7 @@ export interface Tab {
   id: string;
   number: string;
   message: string;
+  commitType: string;
   isActive: boolean;
   createdAt: Date;
   lastModified: Date;

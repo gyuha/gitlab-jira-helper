@@ -10,6 +10,7 @@ interface JiraState {
   gitBranchPrefix: string;
   number: string;
   message: string;
+  commitType: string;
   history: string[];
   jiraDomain: string;
 
@@ -25,6 +26,7 @@ interface JiraState {
   setGitBranchPrefix: (gitBranchPrefix: string) => void;
   setNumber: (number: string) => void;
   setMessage: (message: string) => void;
+  setCommitType: (commitType: string) => void;
   setJiraDomain: (jiraDomain: string) => void;
 
   // Legacy getters (work with active tab)
@@ -44,7 +46,7 @@ interface JiraState {
   createTab: (number?: string, message?: string) => string;
   closeTab: (tabId: string) => boolean;
   switchToTab: (tabId: string) => boolean;
-  updateTabData: (tabId: string, updates: { number?: string; message?: string }) => boolean;
+  updateTabData: (tabId: string, updates: { number?: string; message?: string; commitType?: string }) => boolean;
   
   // Tab queries
   getActiveTab: () => Tab | null;
@@ -74,6 +76,7 @@ export const useJiraStore = create<JiraState>()(
       gitBranchPrefix: "feature/",
       number: "1",
       message: "",
+      commitType: "feat",
       history: [],
       jiraDomain: "",
 
@@ -131,6 +134,20 @@ export const useJiraStore = create<JiraState>()(
             return { ...state, message, tabs: updatedTabs };
           }
           return { ...state, message };
+        });
+      },
+
+      setCommitType: (commitType: string) => {
+        set((state) => {
+          if (state.isMultiTabMode && state.activeTabId) {
+            const updatedTabs = state.tabs.map(tab =>
+              tab.id === state.activeTabId 
+                ? { ...tab, commitType, lastModified: new Date() }
+                : tab
+            );
+            return { ...state, commitType, tabs: updatedTabs };
+          }
+          return { ...state, commitType };
         });
       },
 
@@ -230,6 +247,7 @@ export const useJiraStore = create<JiraState>()(
           id: newTabId,
           number: tabNumber,
           message: message || "",
+          commitType: "feat",
           isActive: true,
           createdAt: now,
           lastModified: now,
@@ -244,6 +262,7 @@ export const useJiraStore = create<JiraState>()(
           nextTabNumber: prevState.nextTabNumber + 1,
           number: tabNumber,
           message: message || "",
+          commitType: "feat",
         }));
 
         return newTabId;
@@ -307,12 +326,13 @@ export const useJiraStore = create<JiraState>()(
           activeTabId: tabId,
           number: tab.number,
           message: tab.message,
+          commitType: tab.commitType,
         }));
 
         return true;
       },
 
-      updateTabData: (tabId: string, updates: { number?: string; message?: string }) => {
+      updateTabData: (tabId: string, updates: { number?: string; message?: string; commitType?: string }) => {
         const state = get();
         const tabIndex = state.tabs.findIndex(tab => tab.id === tabId);
         
@@ -338,6 +358,7 @@ export const useJiraStore = create<JiraState>()(
           if (prevState.activeTabId === tabId) {
             if (updates.number !== undefined) newState.number = updates.number;
             if (updates.message !== undefined) newState.message = updates.message;
+            if (updates.commitType !== undefined) newState.commitType = updates.commitType;
           }
 
           return newState;
@@ -402,6 +423,7 @@ export const useJiraStore = create<JiraState>()(
             id: uuidv4(),
             number: state.number || "1",
             message: state.message || "",
+            commitType: state.commitType || "feat",
             isActive: true,
             createdAt: now,
             lastModified: now,
@@ -426,6 +448,7 @@ export const useJiraStore = create<JiraState>()(
             activeTabId: null,
             number: activeTab?.number || state.number,
             message: activeTab?.message || state.message,
+            commitType: activeTab?.commitType || state.commitType,
           };
         });
       },
@@ -443,6 +466,7 @@ export const useJiraStore = create<JiraState>()(
           set({
             number: activeTab.number,
             message: activeTab.message,
+            commitType: activeTab.commitType,
           });
         }
       },
@@ -458,6 +482,7 @@ export const useJiraStore = create<JiraState>()(
             id: uuidv4(),
             number: persistedState?.number || "1",
             message: persistedState?.message || "",
+            commitType: persistedState?.commitType || "feat",
             isActive: true,
             createdAt: now,
             lastModified: now,

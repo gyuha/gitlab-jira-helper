@@ -46,10 +46,12 @@ export function JiraHelper() {
     gitBranchPrefix,
     number,
     message,
+    commitType,
     setPrefix,
     setGitBranchPrefix,
     setNumber,
     setMessage,
+    setCommitType,
     getJiraTicket,
     getCommit,
     getCommitMessage,
@@ -59,7 +61,6 @@ export function JiraHelper() {
     setJiraDomain,
   } = useJiraStore();
   const [copied, setCopied] = useState<string | null>(null);
-  const [selectedCommitType, setSelectedCommitType] = useState<string>("feat");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [domainError, setDomainError] = useState<string>("");
 
@@ -126,14 +127,14 @@ export function JiraHelper() {
     },
     {
       label: "commit",
-      value: getCommit(selectedCommitType),
-      placeholder: `git commit -m "${selectedCommitType}([JIRA Prefix][JIRA 번호]): [메시지]"`,
+      value: getCommit(commitType),
+      placeholder: `git commit -m "${commitType}([JIRA Prefix][JIRA 번호]): [메시지]"`,
       copyKey: "commit",
     },
     {
       label: "commit message",
-      value: getCommitMessage(selectedCommitType),
-      placeholder: `${selectedCommitType}([JIRA Prefix][JIRA 번호]): [메시지]`,
+      value: getCommitMessage(commitType),
+      placeholder: `${commitType}([JIRA Prefix][JIRA 번호]): [메시지]`,
       copyKey: "commit-message",
     },
     {
@@ -257,8 +258,8 @@ export function JiraHelper() {
                       커밋 타입
                     </label>
                     <Select
-                      value={selectedCommitType}
-                      onValueChange={setSelectedCommitType}
+                      value={commitType}
+                      onValueChange={setCommitType}
                     >
                       <SelectTrigger>
                         <SelectValue placeholder="커밋 타입을 선택하세요" />
