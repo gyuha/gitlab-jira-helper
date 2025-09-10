@@ -174,7 +174,7 @@ export function JiraHelper() {
       <Card className="w-full">
         <CardHeader className="text-center relative px-2 py-2 sm:px-4 sm:py-3">
           <ThemeToggle />
-          <CardTitle className="text-lg sm:text-xl font-bold hidden sm:block">
+          <CardTitle className="text-lg sm:text-xl font-bold">
             JIRA Helper
           </CardTitle>
           <CardDescription className="text-xs sm:text-sm hidden sm:block">
@@ -183,7 +183,7 @@ export function JiraHelper() {
         </CardHeader>
         <CardContent className="space-y-3 sm:space-y-4 px-2 py-2 sm:px-4 sm:py-3">
           {/* Global Settings Section - Always visible at top */}
-          <div className="border-b pb-3 mb-3">
+          <div className="border-b pb-3 mb-3 hidden sm:block">
             <h3 className="text-base font-semibold mb-3">전역 설정</h3>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               {/* JIRA Domain */}
