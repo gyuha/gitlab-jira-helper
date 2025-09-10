@@ -33,22 +33,30 @@ export interface TabComputedProperties {
 }
 
 // Error Types
-export class TabError extends Error {
-  constructor(
-    message: string,
-    public readonly code: TabErrorCode,
-    public readonly tabId?: string
-  ) {
-    super(message);
-    this.name = 'TabError';
-  }
+export interface TabError extends Error {
+  code: TabErrorCode;
+  tabId?: string;
 }
 
-export enum TabErrorCode {
-  MAX_TABS_REACHED = 'MAX_TABS_REACHED',
-  TAB_NOT_FOUND = 'TAB_NOT_FOUND',
-  INVALID_TAB_DATA = 'INVALID_TAB_DATA',
-  CANNOT_CLOSE_LAST_TAB = 'CANNOT_CLOSE_LAST_TAB',
-  STORAGE_ERROR = 'STORAGE_ERROR',
-  MIGRATION_ERROR = 'MIGRATION_ERROR',
-}
+export const createTabError = (
+  message: string,
+  code: TabErrorCode,
+  tabId?: string
+): TabError => {
+  const error = new Error(message) as TabError;
+  error.name = 'TabError';
+  error.code = code;
+  error.tabId = tabId;
+  return error;
+};
+
+export const TabErrorCode = {
+  MAX_TABS_REACHED: 'MAX_TABS_REACHED',
+  TAB_NOT_FOUND: 'TAB_NOT_FOUND',
+  INVALID_TAB_DATA: 'INVALID_TAB_DATA',
+  CANNOT_CLOSE_LAST_TAB: 'CANNOT_CLOSE_LAST_TAB',
+  STORAGE_ERROR: 'STORAGE_ERROR',
+  MIGRATION_ERROR: 'MIGRATION_ERROR',
+} as const;
+
+export type TabErrorCode = typeof TabErrorCode[keyof typeof TabErrorCode];

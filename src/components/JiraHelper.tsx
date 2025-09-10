@@ -4,6 +4,7 @@ import { Search, X } from "lucide-react";
 import { useJiraStore } from "../stores/jiraStore";
 import { OutputItem } from "./OutputItem";
 import { ThemeToggle } from "./ThemeToggle";
+import { TabContainer } from "./TabContainer";
 import {
   Card,
   CardContent,
@@ -181,17 +182,17 @@ export function JiraHelper() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-3 sm:space-y-4 px-2 py-2 sm:px-4 sm:py-3">
-          {/* 입력 섹션 */}
-          <div>
-            <h3 className="text-base font-semibold">입력</h3>
-            <div className="space-y-3">
-              {/* JIRA_DOMAIN 입력란 (PC에서만 보임) */}
-              <div className="space-y-1 hidden sm:block">
-                <label htmlFor="jiraDomain" className="text-xs font-medium">
+          {/* Global Settings Section - Always visible at top */}
+          <div className="border-b pb-3 mb-3">
+            <h3 className="text-base font-semibold mb-3">전역 설정</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              {/* JIRA Domain */}
+              <div className="space-y-1">
+                <label htmlFor="globalJiraDomain" className="text-xs font-medium">
                   JIRA 도메인
                 </label>
                 <Input
-                  id="jiraDomain"
+                  id="globalJiraDomain"
                   type="text"
                   value={jiraDomain}
                   onChange={handleJiraDomainChange}
@@ -201,151 +202,158 @@ export function JiraHelper() {
                   <p className="text-xs text-red-500">{domainError}</p>
                 )}
               </div>
-              {/* 첫 번째 행: JIRA Prefix, Git branch prefix, JIRA 번호 */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-4 gap-2 sm:gap-3">
-                {/* JIRA Prefix 입력 - 작은 화면에서 숨김 */}
-                <div className="space-y-1 hidden sm:block">
-                  <label htmlFor="prefix" className="text-xs font-medium">
-                    JIRA Prefix
-                  </label>
-                  <Input
-                    id="prefix"
-                    type="text"
-                    value={prefix}
-                    onChange={(e) => handlePrefixChange(e.target.value)}
-                    placeholder="PWA"
-                  />
-                </div>
-                {/* Git branch prefix 입력 - 작은 화면에서 숨김 */}
-                <div className="space-y-1 hidden sm:block">
-                  <label
-                    htmlFor="gitBranchPrefix"
-                    className="text-xs font-medium"
-                  >
-                    Git branch prefix
-                  </label>
-                  <Input
-                    id="gitBranchPrefix"
-                    type="text"
-                    value={gitBranchPrefix}
-                    onChange={(e) => setGitBranchPrefix(e.target.value)}
-                    placeholder="feature/"
-                  />
-                </div>
-                <div className="space-y-1">
-                  <label htmlFor="number" className="text-xs font-medium">
-                    JIRA 번호
-                  </label>
-                  <Input
-                    id="number"
-                    type="number"
-                    value={number}
-                    onChange={(e) => handleNumberChange(e.target.value)}
-                    placeholder="1234"
-                  />
-                </div>
-                {/* 커밋 타입 선택 */}
-                <div className="space-y-1">
-                  <label htmlFor="commitType" className="text-xs font-medium">
-                    커밋 타입
-                  </label>
-                  <Select
-                    value={selectedCommitType}
-                    onValueChange={setSelectedCommitType}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="커밋 타입을 선택하세요" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {COMMIT_TYPES.map((type) => (
-                        <SelectItem
-                          key={type.value}
-                          value={type.value}
-                        >
-                          {type.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>{" "}
+              {/* JIRA Prefix */}
               <div className="space-y-1">
-                <label
-                  htmlFor="message"
-                  className="text-xs font-medium text-muted-foreground"
-                >
-                  메시지 (선택사항)
+                <label htmlFor="globalPrefix" className="text-xs font-medium">
+                  JIRA Prefix
                 </label>
                 <Input
-                  id="message"
+                  id="globalPrefix"
                   type="text"
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  placeholder="메시지를 입력하세요 (기본값: '작업 내용' 사용)"
+                  value={prefix}
+                  onChange={(e) => handlePrefixChange(e.target.value)}
+                  placeholder="PRD-"
+                />
+              </div>
+              {/* Git Branch Prefix */}
+              <div className="space-y-1">
+                <label htmlFor="globalGitBranchPrefix" className="text-xs font-medium">
+                  Git Branch Prefix
+                </label>
+                <Input
+                  id="globalGitBranchPrefix"
+                  type="text"
+                  value={gitBranchPrefix}
+                  onChange={(e) => setGitBranchPrefix(e.target.value)}
+                  placeholder="feature/"
                 />
               </div>
             </div>
-          </div>{" "}
-          {/* 출력 섹션 */}
-          <div>
-            {" "}
-            <div className="flex items-center justify-between mb-2">
-              <h3 className="text-base font-semibold">출력</h3>
-              <div className="w-48 relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
-                <Input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="출력 결과 검색..."
-                  className="text-xs h-7 pl-10 pr-8"
-                />
-                {searchQuery && (
-                  <button
-                    onClick={() => setSearchQuery("")}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-                    type="button"
+          </div>
+
+          {/* Tab Container - Contains tab navigation and content */}
+          <TabContainer>
+            {/* Tab Content - Per-tab inputs */}
+            <div className="p-4">
+              <h3 className="text-base font-semibold mb-3">탭 입력</h3>
+              <div className="space-y-3">
+                {/* Tab-specific inputs */}
+                <div className="grid grid-cols-2 gap-2 sm:gap-3">
+                  <div className="space-y-1">
+                    <label htmlFor="number" className="text-xs font-medium">
+                      JIRA 번호
+                    </label>
+                    <Input
+                      id="number"
+                      type="number"
+                      value={number}
+                      onChange={(e) => handleNumberChange(e.target.value)}
+                      placeholder="1234"
+                    />
+                  </div>
+                  {/* 커밋 타입 선택 */}
+                  <div className="space-y-1">
+                    <label htmlFor="commitType" className="text-xs font-medium">
+                      커밋 타입
+                    </label>
+                    <Select
+                      value={selectedCommitType}
+                      onValueChange={setSelectedCommitType}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="커밋 타입을 선택하세요" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {COMMIT_TYPES.map((type) => (
+                          <SelectItem
+                            key={type.value}
+                            value={type.value}
+                          >
+                            {type.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+                <div className="space-y-1">
+                  <label
+                    htmlFor="message"
+                    className="text-xs font-medium text-muted-foreground"
                   >
-                    <X className="h-4 w-4" />
-                  </button>
+                    메시지 (선택사항)
+                  </label>
+                  <Input
+                    id="message"
+                    type="text"
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    placeholder="메시지를 입력하세요 (기본값: '작업 내용' 사용)"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* 출력 섹션 */}
+            <div className="p-4 border-t">
+              <div className="flex items-center justify-between mb-2">
+                <h3 className="text-base font-semibold">출력</h3>
+                <div className="w-48 relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+                  <Input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="출력 결과 검색..."
+                    className="text-xs h-7 pl-10 pr-8"
+                  />
+                  {searchQuery && (
+                    <button
+                      onClick={() => setSearchQuery("")}
+                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                      type="button"
+                    >
+                      <X className="h-4 w-4" />
+                    </button>
+                  )}
+                </div>
+              </div>
+              {/* URL 추가 */}
+              {isUrlReady && (
+                <div className="mb-2">
+                  <span className="text-xs font-medium mr-2">이슈 URL:</span>
+                  <a
+                    href={issueUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-xs underline break-all hover:text-primary/80"
+                  >
+                    {issueUrl}
+                  </a>
+                </div>
+              )}
+              <div className="space-y-2 sm:space-y-3">
+                {filteredOutputItems().length > 0 ? (
+                  filteredOutputItems().map((item) => (
+                    <OutputItem
+                      key={item.copyKey}
+                      label={item.label}
+                      value={item.value}
+                      placeholder={item.placeholder}
+                      copyKey={item.copyKey}
+                      copied={copied}
+                      isFormComplete={isFormComplete}
+                      onCopy={handleCopy}
+                    />
+                  ))
+                ) : (
+                  <div className="text-center py-4 text-muted-foreground text-sm">
+                    검색 결과가 없습니다
+                  </div>
                 )}
               </div>
             </div>
-            {/* URL 추가 */}
-            {isUrlReady && (
-              <div className="mb-2">
-                <span className="text-xs font-medium mr-2">이슈 URL:</span>
-                <a
-                  href={issueUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-xs underline break-all hover:text-primary/80"
-                >
-                  {issueUrl}
-                </a>
-              </div>
-            )}
-            <div className="space-y-2 sm:space-y-3">
-              {filteredOutputItems().length > 0 ? (
-                filteredOutputItems().map((item) => (
-                  <OutputItem
-                    key={item.copyKey}
-                    label={item.label}
-                    value={item.value}
-                    placeholder={item.placeholder}
-                    copyKey={item.copyKey}
-                    copied={copied}
-                    isFormComplete={isFormComplete}
-                    onCopy={handleCopy}
-                  />
-                ))
-              ) : (
-                <div className="text-center py-4 text-muted-foreground text-sm">
-                  검색 결과가 없습니다
-                </div>
-              )}
-            </div>
-          </div>
+          </TabContainer>
         </CardContent>
       </Card>
     </div>

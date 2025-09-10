@@ -7,6 +7,9 @@ export default defineConfig({
   build: {
     outDir: 'docs'
   },
+  server: {
+    allowedHosts: ['fe.gyuha.com', 'jira.gyuha.com']
+  },
   plugins: [
     react(),
     VitePWA({
