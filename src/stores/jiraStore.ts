@@ -211,7 +211,20 @@ export const useJiraStore = create<JiraState>()(
 
         const newTabId = uuidv4();
         const now = new Date();
-        const tabNumber = number || state.nextTabNumber.toString();
+        
+        let tabNumber: string;
+        if (number) {
+          tabNumber = number;
+        } else {
+          // 현재 활성 탭의 번호를 기반으로 다음 번호 계산
+          const activeTab = state.tabs.find(tab => tab.id === state.activeTabId);
+          if (activeTab && activeTab.number) {
+            const currentNumber = parseInt(activeTab.number, 10);
+            tabNumber = isNaN(currentNumber) ? "1" : (currentNumber + 1).toString();
+          } else {
+            tabNumber = state.nextTabNumber.toString();
+          }
+        }
         
         const newTab: Tab = {
           id: newTabId,

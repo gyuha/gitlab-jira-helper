@@ -11,7 +11,6 @@ interface TabContainerProps {
 interface TabHeaderProps {
   tab: Tab;
   isActive: boolean;
-  prefix: string;
   onTabClick: (tabId: string) => void;
   onTabClose: (tabId: string) => void;
 }
@@ -19,11 +18,10 @@ interface TabHeaderProps {
 const TabHeader: React.FC<TabHeaderProps> = ({
   tab,
   isActive,
-  prefix,
   onTabClick,
   onTabClose,
 }) => {
-  const displayTitle = `${prefix}${tab.number}`;
+  const displayTitle = tab.number;
 
   const handleClose = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -59,7 +57,6 @@ export const TabContainer: React.FC<TabContainerProps> = ({ children }) => {
   const {
     tabs,
     activeTabId,
-    prefix,
     canAddTab,
     createTab,
     closeTab,
@@ -115,7 +112,6 @@ export const TabContainer: React.FC<TabContainerProps> = ({ children }) => {
               key={tab.id}
               tab={tab}
               isActive={tab.id === activeTabId}
-              prefix={prefix}
               onTabClick={handleTabClick}
               onTabClose={handleTabClose}
             />
