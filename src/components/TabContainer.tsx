@@ -105,7 +105,7 @@ export const TabContainer: React.FC<TabContainerProps> = ({ children }) => {
   return (
     <div className="w-full">
       {/* Tab Headers */}
-      <div className="flex border-b bg-muted/30">
+      <div className="sticky top-0 z-10 flex border-b bg-background">
         <div className="flex flex-1 overflow-x-auto scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20">
           {tabs.map((tab) => (
             <TabHeader
