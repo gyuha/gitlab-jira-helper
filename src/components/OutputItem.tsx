@@ -2,6 +2,7 @@ import { Copy } from "lucide-react";
 import { Button } from "./ui/button";
 
 interface OutputItemProps {
+  shortcutNumber: number;
   label: string;
   value: string;
   placeholder: string;
@@ -11,21 +12,22 @@ interface OutputItemProps {
   onCopy: (text: string, type: string) => void;
 }
 
-export function OutputItem({ 
-  label, 
-  value, 
-  placeholder, 
-  copyKey, 
-  copied, 
-  isFormComplete, 
-  onCopy 
+export function OutputItem({
+  shortcutNumber,
+  label,
+  value,
+  placeholder,
+  copyKey,
+  copied,
+  isFormComplete,
+  onCopy
 }: OutputItemProps) {
   return (
     <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between p-2 bg-muted rounded-md border sm:gap-2">
       <div className="flex-1 min-w-0">
         <div className="flex items-center justify-between mb-1">
           <div className="text-xs text-muted-foreground">
-            {label}
+            {shortcutNumber}. {label}
           </div>
           <Button
             size="sm"

@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useHotkeys } from "react-hotkeys-hook";
 import Fuse from "fuse.js";
 import { Search, X } from "lucide-react";
 import { useJiraStore } from "../stores/jiraStore";
@@ -63,17 +64,38 @@ export function JiraHelper() {
   const [copied, setCopied] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [domainError, setDomainError] = useState<string>("");
+  const copiedTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const handleCopy = async (text: string, type: string) => {
+  const handleCopy = useCallback(async (text: string, type: string) => {
     await navigator.clipboard.writeText(text);
     setCopied(type);
-    setTimeout(() => setCopied(null), 2000);
-  };
+
+    if (copiedTimeoutRef.current) {
+      clearTimeout(copiedTimeoutRef.current);
+    }
+
+    copiedTimeoutRef.current = setTimeout(() => {
+      setCopied(null);
+      copiedTimeoutRef.current = null;
+    }, 2000);
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (copiedTimeoutRef.current) {
+        clearTimeout(copiedTimeoutRef.current);
+      }
+    };
+  }, []);
 
   const handleNumberChange = (value: string) => {
     // 숫자만 허용
     const numbersOnly = value.replace(/\D/g, "");
     setNumber(numbersOnly);
+  };
+
+  const handleNumberBlur = (value: string) => {
+    setNumber(value.replace(/\D/g, ""));
   };
 
   const handlePrefixChange = (value: string) => {
@@ -112,7 +134,7 @@ export function JiraHelper() {
   const issueUrl = isUrlReady ? `https://${jiraDomain}/browse/${issueKey}` : "";
 
   // 출력 항목들을 계산하는 헬퍼 함수들
-  const createOutputItems = () => [
+  const outputItems = [
     {
       label: "JIRA 티켓 번호",
       value: getJiraTicket(),
@@ -151,27 +173,39 @@ export function JiraHelper() {
     },
   ];
 
-  // React 19에서도 복잡한 계산은 여전히 메모이제이션이 권장됨
-  const outputItems = createOutputItems();
-
   // 검색 결과 필터링
-  const filteredOutputItems = () => {
-    if (!searchQuery.trim()) {
-      return outputItems;
-    }
+  const visibleOutputItems = !searchQuery.trim()
+    ? outputItems
+    : (() => {
+        const fuse = new Fuse(outputItems, {
+          keys: ["label", "value"],
+          threshold: 0.4,
+          includeScore: true,
+        });
 
-    const fuse = new Fuse(outputItems, {
-      keys: ["label", "value"],
-      threshold: 0.4,
-      includeScore: true,
-    });
+        const searchResults = fuse.search(searchQuery);
+        return searchResults.map((result) => result.item);
+      })();
 
-    const searchResults = fuse.search(searchQuery);
-    return searchResults.map((result) => result.item);
-  };
+  const copyItemByIndex = useCallback(
+    (index: number) => {
+      if (!isFormComplete) return;
+      const item = visibleOutputItems[index];
+      if (!item) return;
+      void handleCopy(item.value, item.copyKey);
+    },
+    [handleCopy, isFormComplete, visibleOutputItems]
+  );
+
+  useHotkeys("1", () => copyItemByIndex(0), { preventDefault: true }, [copyItemByIndex]);
+  useHotkeys("2", () => copyItemByIndex(1), { preventDefault: true }, [copyItemByIndex]);
+  useHotkeys("3", () => copyItemByIndex(2), { preventDefault: true }, [copyItemByIndex]);
+  useHotkeys("4", () => copyItemByIndex(3), { preventDefault: true }, [copyItemByIndex]);
+  useHotkeys("5", () => copyItemByIndex(4), { preventDefault: true }, [copyItemByIndex]);
+  useHotkeys("6", () => copyItemByIndex(5), { preventDefault: true }, [copyItemByIndex]);
 
   return (
-    <div className="min-h-screen bg-background p-1 sm:p-2">
+    <div className="min-h-screen bg-background p-1 sm:p-2 outline-none" tabIndex={-1}>
       <Card className="w-full">
         <CardHeader className="text-center relative px-2 py-2 sm:px-4 sm:py-3">
           <ThemeToggle />
@@ -246,9 +280,11 @@ export function JiraHelper() {
                     </label>
                     <Input
                       id="number"
-                      type="number"
+                      type="text"
+                      inputMode="numeric"
                       value={number}
                       onChange={(e) => handleNumberChange(e.target.value)}
+                      onBlur={(e) => handleNumberBlur(e.target.value)}
                       placeholder="1234"
                     />
                   </div>
@@ -334,10 +370,11 @@ export function JiraHelper() {
                 </div>
               )}
               <div className="space-y-2 sm:space-y-3">
-                {filteredOutputItems().length > 0 ? (
-                  filteredOutputItems().map((item) => (
+                {visibleOutputItems.length > 0 ? (
+                  visibleOutputItems.map((item, index) => (
                     <OutputItem
                       key={item.copyKey}
+                      shortcutNumber={index + 1}
                       label={item.label}
                       value={item.value}
                       placeholder={item.placeholder}
