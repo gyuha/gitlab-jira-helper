@@ -357,7 +357,7 @@ export function JiraHelper() {
               </div>
               {/* URL 추가 */}
               {isUrlReady && (
-                <div className="mb-2">
+                <div className="mb-2 flex items-center gap-1">
                   <span className="text-xs font-medium mr-2">이슈 URL:</span>
                   <a
                     href={issueUrl}
@@ -367,6 +367,14 @@ export function JiraHelper() {
                   >
                     {issueUrl}
                   </a>
+                  <button
+                    type="button"
+                    onClick={() => handleCopy(issueUrl, "issue-url")}
+                    className="shrink-0 text-sm text-muted-foreground hover:text-foreground transition-colors p-0.5 border-none bg-transparent outline-none focus:outline-none"
+                    title="링크 복사"
+                  >
+                    {copied === "issue-url" ? "✓" : "🔗"}
+                  </button>
                 </div>
               )}
               <div className="space-y-2 sm:space-y-3">
