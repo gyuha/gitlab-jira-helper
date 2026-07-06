@@ -28,6 +28,13 @@ const TabHeader: React.FC<TabHeaderProps> = ({
     onTabClose(tab.id);
   };
 
+  const handleAuxClick = (e: React.MouseEvent) => {
+    if (e.button === 1) {
+      e.preventDefault();
+      onTabClose(tab.id);
+    }
+  };
+
   return (
     <div
       className={cn(
@@ -37,6 +44,7 @@ const TabHeader: React.FC<TabHeaderProps> = ({
           : 'border-transparent bg-muted/50 text-muted-foreground hover:text-foreground hover:bg-muted'
       )}
       onClick={() => onTabClick(tab.id)}
+      onAuxClick={handleAuxClick}
     >
       <span className="truncate flex-1 min-w-0">
         {displayTitle || '새 탭'}
